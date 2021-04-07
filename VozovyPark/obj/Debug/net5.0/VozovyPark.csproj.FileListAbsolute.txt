@@ -1,0 +1,16 @@
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/bin/Debug/net5.0/VozovyPark
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/bin/Debug/net5.0/VozovyPark.deps.json
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/bin/Debug/net5.0/VozovyPark.runtimeconfig.json
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/bin/Debug/net5.0/VozovyPark.runtimeconfig.dev.json
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/bin/Debug/net5.0/VozovyPark.dll
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/bin/Debug/net5.0/ref/VozovyPark.dll
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/bin/Debug/net5.0/VozovyPark.pdb
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/obj/Debug/net5.0/VozovyPark.csprojAssemblyReference.cache
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/obj/Debug/net5.0/VozovyPark.GeneratedMSBuildEditorConfig.editorconfig
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/obj/Debug/net5.0/VozovyPark.AssemblyInfoInputs.cache
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/obj/Debug/net5.0/VozovyPark.AssemblyInfo.cs
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/obj/Debug/net5.0/VozovyPark.csproj.CoreCompileInputs.cache
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/obj/Debug/net5.0/VozovyPark.dll
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/obj/Debug/net5.0/ref/VozovyPark.dll
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/obj/Debug/net5.0/VozovyPark.pdb
+/home/ondra/RiderProjects/VozovyPark/VozovyPark/obj/Debug/net5.0/VozovyPark.genruntimeconfig.cache

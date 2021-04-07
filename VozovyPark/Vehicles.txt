@@ -1,0 +1,3 @@
+<id>0c3e6085-5d83-46d7-b0d8-aa69f0bb0195<id><b>Peguot<b><m>208<m><t>cabriolet<t><f>8.9<f><r>False<r>
+<id>a6b5dfc6-2f5a-4624-a0cf-6fd92268f7e0<id><b>McLaren<b><m>P19<m><t>sport<t><f>11.5<f><r>False<r>
+<id>fbcd7046-47c7-4653-94cf-2fcb228cc72b<id><b>Mercedes<b><m>GLE<m><t>SUV<t><f>13.1<f><r>False<r>
