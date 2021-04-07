@@ -227,13 +227,16 @@ namespace VozovyPark
                     // Create new vehicle //
                     Vehicle newVehicle = mainAdmin.createNewVehicle();
 
-                    Console.WriteLine("Zadat záznam o údržbě vozidla [y/n]");
-                    string userAction = Console.ReadLine();
-                    
-                    if (userAction.Equals("y") || userAction.Equals("Y"))
+                    string userAction;
+                    do
                     {
-                        mainAdmin.addMaintenanceToVehicle(ref newVehicle);
-                    }
+                        Console.WriteLine("Zadat záznam o údržbě vozidla [y/n]");
+                        userAction = Console.ReadLine();
+                        
+                        if (userAction.Equals("y") || userAction.Equals("Y"))
+                            mainAdmin.addMaintenanceToVehicle(ref newVehicle);
+                        
+                    } while (userAction.Equals("y") || userAction.Equals("Y"));
 
                     vehicles.Add(newVehicle);
                     Console.WriteLine("Vozidlo úspešně přidáno.");
