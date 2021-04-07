@@ -1,4 +1,7 @@
 /VozovyPark/VozovyPark.csproj
+
+VozovyPark/bin/Debug/*
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
