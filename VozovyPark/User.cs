@@ -50,12 +50,13 @@ namespace VozovyPark
         }
 
         // Call to initialize if loading Users from file
-        public User(Guid id, string fName, string lName, string encodedPsswd, int shift)
+        public User(Guid id, string fName, string lName, string encodedPsswd, int shift, DateTime lastLogDate)
         {
             _id = id;
             FirstName = fName;
             LastName = lName;
             Password = DecodePassword(shift, encodedPsswd);
+            LastLoginDate = lastLogDate;
         }
 
         /*
