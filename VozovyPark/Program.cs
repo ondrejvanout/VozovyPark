@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Schema;
 
@@ -57,6 +58,48 @@ namespace VozovyPark
             vehicles = new List<Vehicle>();
 
             string command = String.Empty;
+            
+            // LOAD FROM FILES //
+            string[] usersFromFile = File.ReadAllLines(USERS_FILE_PATH);
+            string[] vehiclesFromFile = File.ReadAllLines(VEHICLES_FILE_PATH);
+            string[] maintenancesFromFile = File.ReadAllLines(MAINTENACES_FILE_PATH);
+
+            Regex regex;
+            GroupCollection groups;
+            foreach (string user in usersFromFile)
+            {
+                // ID
+                regex = new Regex("<id>(.*)<id>");
+                Match idMatch = regex.Match(user);
+                groups = idMatch.Groups;
+                Guid id = new Guid(groups[1].ToString());
+                
+                // NAME
+                regex = new Regex("<n>(.*)<n>");
+                Match nameMatch = regex.Match(user);
+                groups = nameMatch.Groups;
+                string name = groups[1].ToString();
+                
+                // LAST NAME
+                regex = new Regex("<l>(.*)<l>");
+                Match lastNameMatch = regex.Match(user);
+                groups = lastNameMatch.Groups;
+                string lastName = groups[1].ToString();
+                
+                // PASSWORD 
+                regex = new Regex("<p>(.*)<p>");
+                Match passwordMatch = regex.Match(user);
+                groups = passwordMatch.Groups;
+                string[] encodedPassword = groups[1].ToString().Split(":");
+
+                // LAST LOGIN DATE 
+                regex = new Regex("<d>(.*)<d>");
+                Match dateMatch = regex.Match(user);
+                groups = dateMatch.Groups;
+                DateTime lastLoginDate = DateTime.Parse(groups[1].ToString());
+
+                users.Add(new User(id, name, lastName, encodedPassword[1], int.Parse(encodedPassword[0]), lastLoginDate));
+            }
 
             // Main loop - end if user command = "end" 
             while (true)
