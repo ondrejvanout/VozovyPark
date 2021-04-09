@@ -147,7 +147,7 @@ namespace VozovyPark
                 }
             } while (!successfulConversion);
 
-            return new Vehicle(Guid.NewGuid(), brand, model, type, fuelConsumption);
+            return new Vehicle(Guid.NewGuid(), brand, model, type, fuelConsumption, false);
         }
 
         /*
