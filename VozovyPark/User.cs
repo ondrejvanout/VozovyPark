@@ -74,6 +74,11 @@ namespace VozovyPark
             return $"===Admin {Id}===:\nId: {Id}\nJméno: {FirstName}\nPříjmení: {LastName}\n/Heslo: {password}\nNaposled přihlášen: {LastLoginDate.ToString()}";
         }
 
+        public string print()
+        {
+            return $"{FirstName} {LastName}";
+        }
+
         /*
          * Encode and decode password with caesar cipher
          */
