@@ -26,7 +26,9 @@ namespace VozovyPark
         static Dictionary<int, string> adminOperations;
 
         static List<User> users;
+        static List<User> deletedUsers;
         static List<Vehicle> vehicles;
+        static List<Vehicle> brokenVehicles;
 
         static Admin mainAdmin;
         static User currentUser;
@@ -354,7 +356,8 @@ namespace VozovyPark
                     {
                         if (users[i].FirstName == credentials[0] && users[i].LastName == credentials[1])
                         {
-                            users[i] = mainAdmin.deleteUser(users[i]);
+                            deletedUsers.Add(mainAdmin.deleteUser(users[i]));
+                            users.RemoveAt(i);
                             break;
                         }
                     }
@@ -378,8 +381,12 @@ namespace VozovyPark
                     vehicles.Add(newVehicle);
                     Console.WriteLine("Vozidlo úspešně přidáno.");
                     break;
+                case 7:
+                    Console.WriteLine("všichni uživatelé:");
+                    for (int i = 0; i < users.Count; i++) 
+                        Console.WriteLine(users[i].print());
 
-
+                    break;
                 default:
                     Console.WriteLine($"Operace s kódem {opCode} neexistuje.");
                     break;
