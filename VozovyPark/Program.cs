@@ -63,9 +63,11 @@ namespace VozovyPark
             string[] usersFromFile = File.ReadAllLines(USERS_FILE_PATH);
             string[] vehiclesFromFile = File.ReadAllLines(VEHICLES_FILE_PATH);
             string[] maintenancesFromFile = File.ReadAllLines(MAINTENACES_FILE_PATH);
-
+            
             Regex regex;
             GroupCollection groups;
+            
+            // Users
             foreach (string user in usersFromFile)
             {
                 // ID
@@ -101,7 +103,50 @@ namespace VozovyPark
                 users.Add(new User(id, name, lastName, encodedPassword[1], int.Parse(encodedPassword[0]), lastLoginDate));
             }
 
-            // Main loop - end if user command = "end" 
+            // Vehicles
+            foreach (string vehicle in vehiclesFromFile)
+            {
+                // ID
+                regex = new Regex("<id>(.*)<id>");
+                Match idMatch = regex.Match(vehicle);
+                groups = idMatch.Groups;
+                Guid id = new Guid(groups[1].ToString());
+                
+                // BRAND
+                regex = new Regex("<b>(.*)<b>");
+                Match brandMatch = regex.Match(vehicle);
+                groups = brandMatch.Groups;
+                string brand = groups[1].ToString();
+                
+                // MODEL
+                regex = new Regex("<m>(.*)<m>");
+                Match modelMatch = regex.Match(vehicle);
+                groups = modelMatch.Groups;
+                string model = groups[1].ToString();
+                
+                // TYPE
+                regex = new Regex("<t>(.*)<t>");
+                Match typeMatch = regex.Match(vehicle);
+                groups = typeMatch.Groups;
+                string type = groups[1].ToString();
+                
+                // FUEL CONSUMPTION
+                regex = new Regex("<f>(.*)<f>");
+                Match fuelMatch = regex.Match(vehicle);
+                groups = fuelMatch.Groups;
+                double fuelConsumption = double.Parse(groups[1].ToString());
+                
+                // IS RESERVED
+                regex = new Regex("<r>(.*)<r>");
+                Match isReservedMatch = regex.Match(vehicle);
+                groups = isReservedMatch.Groups;
+                bool isReserved = Boolean.Parse(groups[1].ToString());
+                
+                vehicles.Add(new Vehicle(id, brand, model, type, fuelConsumption, isReserved));
+            }
+            
+            
+            // Main loop - end if user command = "end" //
             while (true)
             {
                 // Default window
