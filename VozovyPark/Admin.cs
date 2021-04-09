@@ -169,14 +169,11 @@ namespace VozovyPark
             {
                 Console.WriteLine("Cena:");
             } while (!decimal.TryParse(Console.ReadLine(), out cost));
+            
+            Console.WriteLine("Číslo faktury:");
+            string invoiceNumber = Console.ReadLine();
 
-            int invoiceNumber;
-            do
-            {
-                Console.WriteLine("Číslo faktury:");
-            } while (!int.TryParse(Console.ReadLine(), out invoiceNumber));
-
-            vehicle.addMaintenance(new Maintenance(vehicle.Id, service, time, cost, invoiceNumber));
+            vehicle.addMaintenance(new Maintenance(Guid.NewGuid(), vehicle.Id, service, time, cost, invoiceNumber));
         }
 
 

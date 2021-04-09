@@ -8,14 +8,18 @@ namespace VozovyPark
     {
         private Guid _id;
         private Guid _carId;
+        public Guid CarID { 
+            private set => _carId = value;
+            get => _carId;
+        }
         private string service;
         private DateTime timeOfService;
         private decimal cost;
-        private int invoiceNumber;
+        private string invoiceNumber;
 
-        public Maintenance(Guid carId, string service, DateTime time, decimal cost, int invoiceNum)
+        public Maintenance(Guid id ,Guid carId, string service, DateTime time, decimal cost, string invoiceNum)
         {
-            _id = Guid.NewGuid();
+            _id = id;
             _carId = carId;
             this.service = service;
             timeOfService = time;
