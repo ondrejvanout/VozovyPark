@@ -145,6 +145,55 @@ namespace VozovyPark
                 vehicles.Add(new Vehicle(id, brand, model, type, fuelConsumption, isReserved));
             }
             
+            // Maintenances
+            foreach (string maintenance in maintenancesFromFile)
+            {
+                // ID
+                regex = new Regex("<id>(.*)<id>");
+                Match idMatch = regex.Match(maintenance);
+                groups = idMatch.Groups;
+                Guid id = new Guid(groups[1].ToString());
+                
+                // CAR ID
+                regex = new Regex("<cid>(.*)<cid>");
+                Match carIdMatch = regex.Match(maintenance);
+                groups = carIdMatch.Groups;
+                Guid carId = new Guid(groups[1].ToString());
+                
+                // SERVICE
+                regex = new Regex("<s>(.*)<s>");
+                Match serviceMatch = regex.Match(maintenance);
+                groups = serviceMatch.Groups;
+                string service = groups[1].ToString();
+                
+                // DATE OF SERVICE
+                regex = new Regex("<t>(.*)<t>");
+                Match dateMatch = regex.Match(maintenance);
+                groups = dateMatch.Groups;
+                DateTime dateOfService = DateTime.Parse(groups[1].ToString());
+                
+                // COST
+                regex = new Regex("<c>(.*)<c>");
+                Match costMatch = regex.Match(maintenance);
+                groups = costMatch.Groups;
+                decimal cost = Decimal.Parse(groups[1].ToString());
+                
+                // INVOICE NUMBER
+                regex = new Regex("<ic>(.*)<ic>");
+                Match invoiceNumMatch = regex.Match(maintenance);
+                groups = invoiceNumMatch.Groups;
+                string invoiceNumber = groups[1].ToString();
+
+                Maintenance currentMaintenance = new Maintenance(id, carId, service, dateOfService, cost, invoiceNumber);
+                
+                // Assign maintenance to vehicle
+                for (int i = 0; i < vehicles.Count; i++)
+                {
+                    if (vehicles[i].Id == currentMaintenance.CarID)
+                        vehicles[i].addMaintenance(currentMaintenance);
+                }
+            }
+            
             
             // Main loop - end if user command = "end" //
             while (true)
