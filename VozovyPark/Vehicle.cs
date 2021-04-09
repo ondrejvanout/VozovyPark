@@ -77,14 +77,14 @@ namespace VozovyPark
         private List<Maintenance> maintenancesWork;
 
         // Constructor
-        public Vehicle(Guid id, string brand, string model, string type, double fuel_consumption)
+        public Vehicle(Guid id, string brand, string model, string type, double fuel_consumption, bool reserved)
         {
             _id = id;
             Brand = brand;
             Model = model;
             Type = type;
             FuelConsumption = fuel_consumption;
-            isReserved = false;
+            isReserved = reserved;
             maintenancesWork = new List<Maintenance>();
         }
 
