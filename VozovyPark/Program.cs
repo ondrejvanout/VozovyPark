@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Schema;
@@ -38,17 +39,19 @@ namespace VozovyPark
             userRoles.Add(1, "Uživatel");
             userRoles.Add(2, "Administrátor");
 
+            // Admin operations //
             adminOperations = new Dictionary<int, string>();
             adminOperations.Add(0, "Odhlásit");
             adminOperations.Add(1, "Založit uživatele");
             adminOperations.Add(2, "Smazat uživatele");
             adminOperations.Add(3, "Vložit vozidlo");
-            adminOperations.Add(4, "Odstranit vozidlo");
-            adminOperations.Add(5, "Vložit rezervaci jménem uživatele");
-            adminOperations.Add(6, "Vynutit změnu hesla");
-            adminOperations.Add(7, "Zobrazit všechny uživatele");
-            adminOperations.Add(8, "Zobrazit všechna auta");
-            adminOperations.Add(9, "Zobrazit rezervace");
+            adminOperations.Add(4, "Přidání servisního úkonu");
+            adminOperations.Add(5, "Odstranit vozidlo");
+            adminOperations.Add(6, "Vložit rezervaci jménem uživatele");
+            adminOperations.Add(7, "Vynutit změnu hesla");
+            adminOperations.Add(8, "Zobrazit všechny uživatele");
+            adminOperations.Add(9, "Zobrazit všechna auta");
+            adminOperations.Add(10, "Zobrazit rezervace");
 
             // Main admin
             mainAdmin = new Admin(new Guid(), "Admin", "Admin", "heslo");
@@ -392,14 +395,47 @@ namespace VozovyPark
                     vehicles.Add(newVehicle);
                     Console.WriteLine("Vozidlo úspešně přidáno.");
                     break;
-                case 7:
+                case 4:
+                    Console.WriteLine("Dostupná vozidla:");
+                    for (int i = 0; i < vehicles.Count; i++) 
+                        Console.WriteLine($"[{i}] - {vehicles[i]}");
+                    
+                    int vehicleIndex;
+                    int attempt = 0;
+                    bool successfulParse;
+                    do
+                    {
+                        if (attempt > 0)
+                            Console.WriteLine("Zadejte číslo přiřazené k vozu, které si přejete vybrat");
+                        
+                        Console.Write("Vozidlo: ");
+                        attempt++;
+                        successfulParse = int.TryParse(Console.ReadLine(), out vehicleIndex);
+                    } while (!successfulParse || vehicleIndex < 0 || vehicleIndex >= vehicles.Count);
+                    
+                    if (vehicles.ElementAt(vehicleIndex) != null)
+                    {
+                        Vehicle currentVehicle = vehicles[vehicleIndex];
+                        string userSelector;
+                        do
+                        {
+                            mainAdmin.addMaintenanceToVehicle(ref currentVehicle);
+                            Console.WriteLine("Zadat záznam o údržbě vozidla [y/n]");
+                            userSelector = Console.ReadLine();
+                        } while (userSelector.Equals("y") || userSelector.Equals("Y"));
+
+                        vehicles[vehicleIndex] = currentVehicle;
+                    }
+
+                    break;
+                case 8:
                     Console.WriteLine("==Uživatelé==:");
                     for (int i = 0; i < users.Count; i++) 
                         users[i].print();
                     
                     Console.WriteLine();
                     break;
-                case 8:
+                case 9:
                     Console.WriteLine("==Vozidla==:");
                     for (int i = 0; i < vehicles.Count; i++) 
                         vehicles[i].print();
