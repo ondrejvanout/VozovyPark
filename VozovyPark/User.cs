@@ -74,9 +74,9 @@ namespace VozovyPark
             return $"===Admin {Id}===:\nId: {Id}\nJméno: {FirstName}\nPříjmení: {LastName}\n/Heslo: {password}\nNaposled přihlášen: {LastLoginDate.ToString()}";
         }
 
-        public string print()
+        public void print()
         {
-            return $"{FirstName} {LastName}";
+            Console.WriteLine($"{FirstName} {LastName}");
         }
 
         /*

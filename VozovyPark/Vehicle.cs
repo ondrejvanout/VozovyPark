@@ -32,9 +32,9 @@ namespace VozovyPark
             return $"<id>{_id}<id><cid>{_carId}<cid><s>{service}<s><t>{timeOfService.ToString()}<t><c>{cost}<c><ic>{invoiceNumber}<ic>";
         }
 
-        public override string ToString()
+        public void print()
         {
-            return $"Servisní úkon: {service}\nČas provedení: {timeOfService}\nCena: {cost}\nČíslo faktury: {invoiceNumber}\n";
+            Console.WriteLine($"Servisní úkon: {service}\nČas provedení: {timeOfService}\nCena: {cost}\nČíslo faktury: {invoiceNumber}\n");
         }
     }
 
@@ -110,6 +110,18 @@ namespace VozovyPark
         public string toFileFormat()
         {
             return $"<id>{Id}<id><b>{Brand}<b><m>{Model}<m><t>{Type}<t><f>{FuelConsumption}<f><r>{isReserved}<r>";
+        }
+
+        public void print()
+        {
+            Console.WriteLine($"\n{Brand} {Model}\n-typ: {Type}\n-spotřeba: {FuelConsumption} l/100 km");
+            if (maintenancesWork.Count != 0)
+            {
+                Console.WriteLine("Servisní úkony vozidla:");
+                for (int i = 0; i < maintenancesWork.Count; i++)
+                    maintenancesWork[i].print();
+            }
+            
         }
     }
 }
