@@ -121,7 +121,11 @@ namespace VozovyPark
                 for (int i = 0; i < maintenancesWork.Count; i++)
                     maintenancesWork[i].print();
             }
-            
+        }
+
+        public override string ToString()
+        {
+            return $"{Brand} {Model} ({Type})";
         }
     }
 }
