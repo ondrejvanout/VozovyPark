@@ -31,7 +31,6 @@ namespace VozovyPark
         static List<Vehicle> brokenVehicles;
 
         static Admin mainAdmin;
-        static User currentUser;
 
         static void Main(string[] args)
         {
@@ -56,6 +55,8 @@ namespace VozovyPark
 
             // List of all users
             users = new List<User>();
+            // List of all deleted users
+            deletedUsers = new List<User>();
             // List of all vehicles
             vehicles = new List<Vehicle>();
 
@@ -102,7 +103,12 @@ namespace VozovyPark
                 groups = dateMatch.Groups;
                 DateTime lastLoginDate = DateTime.Parse(groups[1].ToString());
 
-                users.Add(new User(id, name, lastName, encodedPassword[1], int.Parse(encodedPassword[0]), lastLoginDate));
+                User currentUser = new User(id, name, lastName, encodedPassword[1], int.Parse(encodedPassword[0]), lastLoginDate);
+                
+                if (name.Equals(string.Empty) && lastName.Equals(string.Empty) && encodedPassword[1].Equals(string.Empty))
+                    deletedUsers.Add(currentUser);
+                else
+                    users.Add(currentUser);
             }
 
             // Vehicles
@@ -275,6 +281,11 @@ namespace VozovyPark
             {
                 usersInFileFormat.Add(x.toFileFormat());
             }
+
+            foreach (User x in deletedUsers)
+            {
+                usersInFileFormat.Add(x.toFileFormat());
+            }
             File.WriteAllLines(USERS_FILE_PATH, usersInFileFormat);
 
             // Vehicles
@@ -382,10 +393,17 @@ namespace VozovyPark
                     Console.WriteLine("Vozidlo úspešně přidáno.");
                     break;
                 case 7:
-                    Console.WriteLine("všichni uživatelé:");
+                    Console.WriteLine("==Uživatelé==:");
                     for (int i = 0; i < users.Count; i++) 
-                        Console.WriteLine(users[i].print());
-
+                        users[i].print();
+                    
+                    Console.WriteLine();
+                    break;
+                case 8:
+                    Console.WriteLine("==Vozidla==:");
+                    for (int i = 0; i < vehicles.Count; i++) 
+                        vehicles[i].print();
+                    
                     break;
                 default:
                     Console.WriteLine($"Operace s kódem {opCode} neexistuje.");
