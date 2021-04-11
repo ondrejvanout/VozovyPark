@@ -21,6 +21,7 @@ namespace VozovyPark
         private const string USERS_FILE_PATH = @"/home/ondra/RiderProjects/VozovyPark/VozovyPark/Users.txt";
         private const string VEHICLES_FILE_PATH = @"/home/ondra/RiderProjects/VozovyPark/VozovyPark/Vehicles.txt";
         private const string MAINTENACES_FILE_PATH = @"/home/ondra/RiderProjects/VozovyPark/VozovyPark/Maintenances.txt";
+        private const string RESERVATIONS_FILE_PATH = @"/home/ondra/RiderProjects/VozovyPark/VozovyPark/Reservations.txt";
 
         static Dictionary<int, string> userRoles;
 
@@ -374,6 +375,14 @@ namespace VozovyPark
             }
             File.WriteAllLines(VEHICLES_FILE_PATH, vehiclesInFileFormat);
             File.WriteAllLines(MAINTENACES_FILE_PATH, maintenancesInFileFormat);
+            
+            // Reservations
+            List<string> reservationsInFileFormat = new List<string>();
+            foreach (Reservation x in reservations)
+            {
+                reservationsInFileFormat.Add(x.toFileFormat());
+            }
+            File.WriteAllLines(RESERVATIONS_FILE_PATH, reservationsInFileFormat);
         }
 
         static string getRole()
