@@ -31,6 +31,7 @@ namespace VozovyPark
         static List<User> deletedUsers;
         static List<Vehicle> vehicles;
         static List<Vehicle> deletedVehicles;
+        static List<Reservation> reservations;
 
         static Admin mainAdmin;
         static User mainUser;
@@ -60,8 +61,8 @@ namespace VozovyPark
             userOperations.Add(0, "Odhlásit");
             userOperations.Add(1, "Změnit heslo");
             userOperations.Add(2, "Zadat rezervaci");
-            userOperations.Add(3, "Zrušit operaci");
-            userOperations.Add(4, "Zobrazit aktuálních rezervace");
+            userOperations.Add(3, "Zrušit rezervaci");
+            userOperations.Add(4, "Zobrazit aktuální rezervace");
             
             // Main admin
             mainAdmin = new Admin(new Guid(), "Admin", "Admin", "heslo");
@@ -74,6 +75,8 @@ namespace VozovyPark
             vehicles = new List<Vehicle>();
             // List of all deleted vehicles
             deletedVehicles = new List<Vehicle>();
+            // List of all reservations
+            reservations = new List<Reservation>();
 
             string command = String.Empty;
             
@@ -279,7 +282,7 @@ namespace VozovyPark
                                 do
                                 {
                                     if (int.TryParse(getUserOpCode(), out operationCode))
-                                        Console.WriteLine(operationCode);//executeUserOperation(operationCode);
+                                        executeUserOperation(operationCode);
                                     else
                                     {
                                         Console.WriteLine("Špatně zadaná instrukce. Zadejte číslo přiřazené k instrukci, kterou chcete provést.");
@@ -580,8 +583,96 @@ namespace VozovyPark
                     break;
             }
         }
-        
-        
+
+        static void executeUserOperation(int opCode)
+        {
+            Console.WriteLine(BARRIER);
+
+            switch (opCode)
+            {
+                case 0:
+                    // Log out
+                    Console.WriteLine("Uživatel odhlášen");
+                    break;
+                case 1:
+                    // Change password
+                    Console.WriteLine("Nové heslo:");
+                    mainUser.Password = Console.ReadLine();
+                    break;
+                case 2:
+                    // Create reservation
+                    Console.WriteLine("Dostupná vozidla:");
+                    for (int i = 0; i < vehicles.Count; i++)
+                    {
+                        Console.WriteLine($"[{i}] - {vehicles[i]}");
+                    }
+                    
+                    // VEHICLE
+                    int vehicleIndex;
+                    int attempt = 0;
+                    bool successfulParse;
+                    do
+                    {
+                        if (attempt > 0)
+                            Console.WriteLine("Zadejte číslo přiřazené k vozu, které si přejete vybrat");
+                        
+                        Console.Write("Vozidlo: ");
+                        attempt++;
+                        successfulParse = int.TryParse(Console.ReadLine(), out vehicleIndex);
+                    } while (!successfulParse || vehicleIndex < 0 || vehicleIndex >= vehicles.Count);
+
+                    Vehicle selectedVehicle = vehicles[vehicleIndex];
+                    
+                    // DATE FROM
+                    DateTime dateFrom;
+                    do
+                    {
+                        Console.WriteLine("Datum začátku rezervace (formát: 01.12.2020):");
+                    } while (!DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy", null, DateTimeStyles.None, out dateFrom));
+                    
+                    // DATE TO
+                    DateTime dateTo;
+                    int dateCompareResult;
+                    int mistakeCount = 0;
+                    do
+                    {
+                        if (mistakeCount > 0)
+                            Console.WriteLine("Datum konce rezervace musí být později než datum začátku");
+                        mistakeCount++;
+                        
+                        do
+                        {
+                            Console.WriteLine("Datum konce rezervace (formát: 01.12.2020):");
+                        } while (!DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy", null, DateTimeStyles.None,
+                            out dateTo));
+
+                        dateCompareResult = DateTime.Compare(dateFrom, dateTo);
+                    } while (dateCompareResult >= 0);
+                    
+                    
+                    reservations.Add(new Reservation(Guid.NewGuid(), mainUser, selectedVehicle, dateFrom, dateTo));
+                    
+                    Console.WriteLine("\nRezervace úspěšně přidána\n");
+                    break;
+                case 3:
+                    // Delete reservation
+                
+                    break;
+                case 4:
+                    // Show all reservations
+                    Console.WriteLine("Moje rezervace:");
+                    foreach (Reservation reservation in reservations)
+                    {
+                        if (mainUser.Id.Equals(reservation.User.Id))
+                            reservation.print();
+                    }
+                    
+                    break;
+                default:
+                    Console.WriteLine($"Operace s kódem {opCode} neexistuje.");
+                    break;
+            }
+        }
         
     }
 }

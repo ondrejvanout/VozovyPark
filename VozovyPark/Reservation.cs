@@ -54,5 +54,10 @@ namespace VozovyPark
         {
             return $"<id>{Id}<id><uid>{User.Id}<uid><vid>{Vehicle.Id}<vid><df>{DateFrom}<df><dt>{DateTo}<dt>";
         }
+
+        public void print()
+        {
+            Console.WriteLine($"Vozidlo: {Vehicle}\nod: {dateFrom.ToString("dd.MM.yyyy")}\ndo: {dateTo.ToString("dd.MM.yyyy")}");
+        }
     }
 }
