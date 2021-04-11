@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
@@ -29,9 +30,10 @@ namespace VozovyPark
         static List<User> users;
         static List<User> deletedUsers;
         static List<Vehicle> vehicles;
-        static List<Vehicle> brokenVehicles;
+        static List<Vehicle> deletedVehicles;
 
         static Admin mainAdmin;
+        static User mainUser;
 
         static void Main(string[] args)
         {
@@ -52,7 +54,15 @@ namespace VozovyPark
             adminOperations.Add(8, "Zobrazit všechny uživatele");
             adminOperations.Add(9, "Zobrazit všechna auta");
             adminOperations.Add(10, "Zobrazit rezervace");
-
+            
+            // User operations //
+            userOperations = new Dictionary<int, string>();
+            userOperations.Add(0, "Odhlásit");
+            userOperations.Add(1, "Změnit heslo");
+            userOperations.Add(2, "Zadat rezervaci");
+            userOperations.Add(3, "Zrušit operaci");
+            userOperations.Add(4, "Zobrazit aktuálních rezervace");
+            
             // Main admin
             mainAdmin = new Admin(new Guid(), "Admin", "Admin", "heslo");
 
@@ -62,6 +72,8 @@ namespace VozovyPark
             deletedUsers = new List<User>();
             // List of all vehicles
             vehicles = new List<Vehicle>();
+            // List of all deleted vehicles
+            deletedVehicles = new List<Vehicle>();
 
             string command = String.Empty;
             
@@ -153,7 +165,16 @@ namespace VozovyPark
                 groups = isReservedMatch.Groups;
                 bool isReserved = Boolean.Parse(groups[1].ToString());
                 
-                vehicles.Add(new Vehicle(id, brand, model, type, fuelConsumption, isReserved));
+                // IS RESERVED
+                regex = new Regex("<d>(.*)<d>");
+                Match isDeletedMatch = regex.Match(vehicle);
+                groups = isDeletedMatch.Groups;
+                bool isDeleted = Boolean.Parse(groups[1].ToString());
+                
+                if (isDeleted)
+                    deletedVehicles.Add(new Vehicle(id, brand, model, type, fuelConsumption, isReserved, isDeleted));
+                else
+                    vehicles.Add(new Vehicle(id, brand, model, type, fuelConsumption, isReserved));
             }
             
             // Maintenances
@@ -203,8 +224,14 @@ namespace VozovyPark
                     if (vehicles[i].Id == currentMaintenance.CarID)
                         vehicles[i].addMaintenance(currentMaintenance);
                 }
+
+                for (int i = 0; i < deletedVehicles.Count; i++)
+                {
+                    if (deletedVehicles[i].Id == currentMaintenance.CarID)
+                        deletedVehicles[i].addMaintenance(currentMaintenance);
+                }
             }
-            
+  
             
             // Main loop - end if user command = "end" //
             while (true)
@@ -223,8 +250,42 @@ namespace VozovyPark
                         switch (selectedRole)
                         {
                             case 1:
-                                // User login
+                                /*
+                                 * User login
+                                 */
+                                Console.WriteLine(BARRIER);
 
+                                bool successLogin = false;
+                                int failedLoginCount = -1;
+                                do
+                                {
+                                    failedLoginCount++;
+                                    if (failedLoginCount > 0)
+                                        Console.WriteLine("Špatné přihlašovací údaje");
+
+                                    Console.WriteLine("Login");
+                                    mainUser = loginUser();
+                                } while (mainUser == null);
+                                
+                                /*
+                                 * User´s operations 
+                                 */
+                                Console.WriteLine($"{BARRIER}\n{BARRIER}");
+                                Console.WriteLine("Příhlášen jako uživatel");
+                                Console.WriteLine($"Jméno: {mainUser.FirstName}\nPříjmení: {mainUser.LastName}\n" +
+                                                  $"Poslední přihlášení: {mainUser.LastLoginDate}\n");
+
+                                int operationCode;
+                                do
+                                {
+                                    if (int.TryParse(getUserOpCode(), out operationCode))
+                                        Console.WriteLine(operationCode);//executeUserOperation(operationCode);
+                                    else
+                                    {
+                                        Console.WriteLine("Špatně zadaná instrukce. Zadejte číslo přiřazené k instrukci, kterou chcete provést.");
+                                        operationCode = int.MaxValue;
+                                    }
+                                } while (operationCode != 0);
 
                                 break;
                             case 2:
@@ -301,6 +362,13 @@ namespace VozovyPark
                 for (int i = 0; i < x.getMaintenaceCount(); i++)
                     maintenancesInFileFormat.Add(x.getMaintenanceByIndex(i).toFileFormat());
             }
+
+            foreach (Vehicle deletedVehicle in deletedVehicles)
+            {
+                vehiclesInFileFormat.Add(deletedVehicle.toFileFormat());
+                for (int i = 0; i < deletedVehicle.getMaintenaceCount(); i++)
+                    maintenancesInFileFormat.Add(deletedVehicle.getMaintenanceByIndex(i).toFileFormat());
+            }
             File.WriteAllLines(VEHICLES_FILE_PATH, vehiclesInFileFormat);
             File.WriteAllLines(MAINTENACES_FILE_PATH, maintenancesInFileFormat);
         }
@@ -336,6 +404,28 @@ namespace VozovyPark
                 return false;
         }
 
+        static User loginUser()
+        {
+            Console.WriteLine("Zadejte jméno:");
+            string name = Console.ReadLine();
+
+            Console.WriteLine("Zadejte příjmení:");
+            string lastName = Console.ReadLine();
+
+            Console.WriteLine("Zadejte heslo:");
+            string password = Console.ReadLine();
+
+            User user = new User(name, lastName, password);
+
+            foreach (User currentUser in users)
+            {
+                if (currentUser.isThisUser(user))
+                    return currentUser;
+            }
+
+            return null;
+        }
+
         static string getAdminOpCode()
         {
             Console.WriteLine("Funkce:");
@@ -343,6 +433,17 @@ namespace VozovyPark
             foreach (KeyValuePair<int, string> operation in adminOperations)
                 Console.WriteLine($"[{operation.Key}] - {operation.Value}");
 
+            Console.Write("Operace: ");
+            return Console.ReadLine();
+        }
+
+        static string getUserOpCode()
+        {
+            Console.WriteLine("Funkce:");
+
+            foreach (KeyValuePair<int, string> operation in userOperations)
+                Console.WriteLine($"[{operation.Key}] - {operation.Value}");    
+                
             Console.Write("Operace: ");
             return Console.ReadLine();
         }
@@ -428,6 +529,35 @@ namespace VozovyPark
                     }
 
                     break;
+                case 5:
+                    Console.WriteLine("Dostupná vozidla:");
+                    for (int i = 0; i < vehicles.Count; i++) 
+                        Console.WriteLine($"[{i}] - {vehicles[i]}");
+                    
+                    int index;
+                    int parseAttempt = 0;
+                    bool successful;
+                    do
+                    {
+                        if (parseAttempt > 0)
+                            Console.WriteLine("Zadejte číslo přiřazené k vozu, které si přejete vybrat");
+                        
+                        Console.Write("Vozidlo: ");
+                        parseAttempt++;
+                        successful = int.TryParse(Console.ReadLine(), out index);
+                    } while (!successful || index < 0 || index >= vehicles.Count);
+
+                    if (vehicles.ElementAt(index) != null)
+                    {
+                        Vehicle deletedVehicle = vehicles[index];
+                        deletedVehicle.isDeleted = true;
+                        deletedVehicles.Add(deletedVehicle);
+                        vehicles.RemoveAt(index);
+                        
+                        Console.WriteLine("\nVozidlo úspěšně odstraněno\n");
+                    }
+                    
+                    break;
                 case 8:
                     Console.WriteLine("==Uživatelé==:");
                     for (int i = 0; i < users.Count; i++) 
@@ -440,11 +570,18 @@ namespace VozovyPark
                     for (int i = 0; i < vehicles.Count; i++) 
                         vehicles[i].print();
                     
+                    Console.WriteLine("\n==Odstraněná vozidla==:");
+                    for (int i = 0; i < deletedVehicles.Count; i++)
+                        deletedVehicles[i].print();
+                    
                     break;
                 default:
                     Console.WriteLine($"Operace s kódem {opCode} neexistuje.");
                     break;
             }
         }
+        
+        
+        
     }
 }

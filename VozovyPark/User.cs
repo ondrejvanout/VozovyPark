@@ -48,6 +48,14 @@ namespace VozovyPark
             LastName = lName;
             Password = psswd;
         }
+        
+        // Use when ogin
+        public User(string fName, string lName, string psswd)
+        {
+            FirstName = fName;
+            LastName = lName;
+            Password = psswd;
+        }
 
         // Call to initialize if loading Users from file
         public User(Guid id, string fName, string lName, string encodedPsswd, int shift, DateTime lastLogDate)

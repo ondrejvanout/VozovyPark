@@ -77,10 +77,12 @@ namespace VozovyPark
 
         public bool isReserved;
 
+        public bool isDeleted;
+        
         // Initialized in constructor empty. Add to list by method.
         private List<Maintenance> maintenancesWork;
 
-        // Constructor
+        // Constructors
         public Vehicle(Guid id, string brand, string model, string type, double fuel_consumption, bool reserved)
         {
             _id = id;
@@ -90,6 +92,19 @@ namespace VozovyPark
             FuelConsumption = fuel_consumption;
             isReserved = reserved;
             maintenancesWork = new List<Maintenance>();
+            isDeleted = false;
+        }
+        
+        public Vehicle(Guid id, string brand, string model, string type, double fuel_consumption, bool reserved, bool deleted)
+        {
+            _id = id;
+            Brand = brand;
+            Model = model;
+            Type = type;
+            FuelConsumption = fuel_consumption;
+            isReserved = reserved;
+            maintenancesWork = new List<Maintenance>();
+            isDeleted = deleted;
         }
 
         public void addMaintenance(Maintenance maintenance)
@@ -109,12 +124,12 @@ namespace VozovyPark
 
         public string toFileFormat()
         {
-            return $"<id>{Id}<id><b>{Brand}<b><m>{Model}<m><t>{Type}<t><f>{FuelConsumption}<f><r>{isReserved}<r>";
+            return $"<id>{Id}<id><b>{Brand}<b><m>{Model}<m><t>{Type}<t><f>{FuelConsumption}<f><r>{isReserved}<r><d>{isDeleted}<d>";
         }
 
         public void print()
         {
-            Console.WriteLine($"\n{Brand} {Model}\n-typ: {Type}\n-spotřeba: {FuelConsumption} l/100 km");
+            Console.WriteLine($"{Brand} {Model}\n-typ: {Type}\n-spotřeba: {FuelConsumption} l/100 km");
             if (maintenancesWork.Count != 0)
             {
                 Console.WriteLine("Servisní úkony vozidla:");
