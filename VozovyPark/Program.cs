@@ -18,7 +18,7 @@ namespace VozovyPark
     {
         private const string BARRIER = "====================================================";
         private const string END_COMMAND = "end";
-
+        
         private const string USERS_FILE_PATH = @"/home/ondra/RiderProjects/VozovyPark/VozovyPark/Users.txt";
         private const string VEHICLES_FILE_PATH = @"/home/ondra/RiderProjects/VozovyPark/VozovyPark/Vehicles.txt";
         private const string MAINTENACES_FILE_PATH = @"/home/ondra/RiderProjects/VozovyPark/VozovyPark/Maintenances.txt";
@@ -43,7 +43,7 @@ namespace VozovyPark
         static void Main(string[] args)
         {
             todaysDate = DateTime.Today;
-            
+
             userRoles = new Dictionary<int, string>();
             userRoles.Add(1, "Uživatel");
             userRoles.Add(2, "Administrátor");
