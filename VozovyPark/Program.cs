@@ -7,6 +7,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Schema;
@@ -85,6 +86,7 @@ namespace VozovyPark
             string[] usersFromFile = File.ReadAllLines(USERS_FILE_PATH);
             string[] vehiclesFromFile = File.ReadAllLines(VEHICLES_FILE_PATH);
             string[] maintenancesFromFile = File.ReadAllLines(MAINTENACES_FILE_PATH);
+            string[] reservationsFromFile = File.ReadAllLines(RESERVATIONS_FILE_PATH);
             
             Regex regex;
             GroupCollection groups;
@@ -236,6 +238,58 @@ namespace VozovyPark
                 }
             }
   
+            // Reservations
+            foreach (string reservation in reservationsFromFile)
+            {
+                // ID
+                regex = new Regex("<id>(.*)<id>");
+                Match idMatch = regex.Match(reservation);
+                groups = idMatch.Groups;
+                Guid id = new Guid(groups[1].ToString());
+                
+                // USER ID
+                regex = new Regex("<uid>(.*)<uid>");
+                Match uidMatch = regex.Match(reservation);
+                groups = uidMatch.Groups;
+                Guid userId = new Guid(groups[1].ToString());
+                
+                // VEHICLE ID
+                regex = new Regex("<vid>(.*)<vid>");
+                Match vidMatch = regex.Match(reservation);
+                groups = vidMatch.Groups;
+                Guid vehicleId = new Guid(groups[1].ToString());
+                
+                // DATE FROM
+                regex = new Regex("<df>(.*)<df>");
+                Match dateFromMatch = regex.Match(reservation);
+                groups = dateFromMatch.Groups;
+                DateTime dateFrom = DateTime.Parse(groups[1].ToString());
+                
+                // DATE TO
+                regex = new Regex("<dt>(.*)<dt>");
+                Match dateToMatch = regex.Match(reservation);
+                groups = dateToMatch.Groups;
+                DateTime dateTo = DateTime.Parse(groups[1].ToString());
+                
+                // Find correct user by id
+                User correctUser = null;
+                foreach (User user in users)
+                {
+                    if (userId.Equals(user.Id))
+                        correctUser = user;
+                }
+                
+                // Find correct vehicle by id
+                Vehicle correctVehicle = null;
+                foreach (Vehicle vehicle in vehicles)
+                {
+                    if (vehicleId.Equals(vehicle.Id))
+                        correctVehicle = vehicle;
+                }
+                
+                reservations.Add(new Reservation(id, correctUser, correctVehicle, dateFrom, dateTo));
+            }
+            
             
             // Main loop - end if user command = "end" //
             while (true)
@@ -585,6 +639,13 @@ namespace VozovyPark
                     Console.WriteLine("\n==Odstraněná vozidla==:");
                     for (int i = 0; i < deletedVehicles.Count; i++)
                         deletedVehicles[i].print();
+                    
+                    break;
+                case 10:
+                    // Show all reservations
+                    Console.WriteLine("==Rezervace==:");
+                    for (int i = 0; i < reservations.Count; i++)
+                        reservations[i].print();
                     
                     break;
                 default:
