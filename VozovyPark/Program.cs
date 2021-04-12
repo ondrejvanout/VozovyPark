@@ -660,6 +660,32 @@ namespace VozovyPark
                 case 6:
                     // Add reservation as user
                     
+                    // Select user
+                    Console.WriteLine("==Uživatelé==:");
+                    for (int i = 0; i < users.Count; i++)
+                    {
+                        Console.Write($"[{i}] - ");
+                        users[i].print();
+                    }
+                    
+                    int userIndex;
+                    int indexParseAttempt = 0;
+                    bool parseSuccess;
+                    do
+                    {
+                        if (indexParseAttempt > 0)
+                            Console.WriteLine("Zadejte číslo přiřazené k vozu, které si přejete vybrat");
+                        
+                        Console.Write("Vozidlo: ");
+                        indexParseAttempt++;
+                        parseSuccess = int.TryParse(Console.ReadLine(), out userIndex);
+                    } while (!parseSuccess || userIndex < 0 || userIndex >= vehicles.Count);
+
+                    User selectedUser = users[userIndex];
+                    Console.WriteLine();
+
+                    // Reservation
+                    reservations.Add(selectedUser.createNewReservation(reservations, vehicles, todaysDate));
                     break;
                 case 8:
                     Console.WriteLine("==Uživatelé==:");
@@ -708,115 +734,7 @@ namespace VozovyPark
                     break;
                 case 2:
                     // Create reservation
-                    Console.WriteLine("Dostupná vozidla:");
-                    for (int i = 0; i < vehicles.Count; i++)
-                    {
-                        if (!vehicles[i].isReserved)
-                            Console.WriteLine($"[{i}] - {vehicles[i]}");
-                    }
-                    
-                    List<int> reservedVehicleIndexes = new List<int>();
-                    Console.WriteLine("\nRezervovaná vozidla");
-                    for (int i = 0; i < vehicles.Count; i++)
-                    {
-                        if (vehicles[i].isReserved)
-                        {
-                            Console.WriteLine($"[{i}] - {vehicles[i]}");
-                            reservedVehicleIndexes.Add(i);
-                        }
-                    }
-                    
-                    // VEHICLE
-                    int vehicleIndex;
-                    int attempt = 0;
-                    bool successfulParse;
-                    do
-                    {
-                        if (attempt > 0)
-                            Console.WriteLine("Zadejte číslo přiřazené k vozu, které si přejete vybrat");
-                        
-                        Console.Write("Vozidlo: ");
-                        attempt++;
-                        successfulParse = int.TryParse(Console.ReadLine(), out vehicleIndex);
-                    } while (!successfulParse || vehicleIndex < 0 || vehicleIndex >= vehicles.Count);
-                    
-                    vehicles[vehicleIndex].isReserved = true;
-                    Vehicle selectedVehicle = vehicles[vehicleIndex];
-
-                    DateTime nextAvailableDate;
-                    bool selectedReservedVehicle = false;
-                    List<Reservation> selectedVehicleReservations = new List<Reservation>();
-                    if (reservedVehicleIndexes.Contains(vehicleIndex))
-                    {
-                        selectedReservedVehicle = true;
-                        
-                        foreach (Reservation x in reservations)
-                        {
-                            if (x.Vehicle.Id.Equals(selectedVehicle.Id))
-                                selectedVehicleReservations.Add(x);
-                        }
-                    }
-                    
-                    // DATE FROM
-                    DateTime dateFrom;
-                    if (selectedReservedVehicle)
-                    {
-                        nextAvailableDate = findNextAvailableDate(selectedVehicleReservations);
-                        Console.WriteLine($"\nNejbližší volné datum rezervace ke zvolenému vozidlu je {nextAvailableDate.ToString("dd.MM.yyyy")}\n");
-                        int mistakeCountDF = 0;
-                        do
-                        {
-                            if (mistakeCountDF > 0)
-                                Console.WriteLine($"Nejbližší volné datum rezervace ke zvolenému vozidlu je {nextAvailableDate.ToString("dd.MM.yyyy")}");
-                            mistakeCountDF++;
-                        
-                            do
-                            {
-                                Console.WriteLine("Datum začátku rezervace (formát: 01.12.2020):");
-                            } while (!DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy", null, DateTimeStyles.None,
-                                out dateFrom));
-
-                        } while (DateTime.Compare(nextAvailableDate, dateFrom) > 0);
-                    }
-                    else
-                    {
-                        int mistakeCountDF = 0;
-                        do
-                        {
-                            if (mistakeCountDF > 0)
-                                Console.WriteLine("Datum začátku rezervace musí být minimálně zítřejší datum.");
-                            mistakeCountDF++;
-                        
-                            do
-                            {
-                                Console.WriteLine("Datum začátku rezervace (formát: 01.12.2020):");
-                            } while (!DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy", null, DateTimeStyles.None,
-                                out dateFrom));
-
-                        } while (DateTime.Compare(todaysDate, dateFrom) >= 0);
-                    }
-
-                    // DATE TO
-                    DateTime dateTo;
-                    int dateCompareResult;
-                    int mistakeCountDT = 0;
-                    do
-                    {
-                        if (mistakeCountDT > 0)
-                            Console.WriteLine("Datum konce rezervace musí být později než datum začátku");
-                        mistakeCountDT++;
-                        
-                        do
-                        {
-                            Console.WriteLine("Datum konce rezervace (formát: 01.12.2020):");
-                        } while (!DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy", null, DateTimeStyles.None,
-                            out dateTo));
-
-                        dateCompareResult = DateTime.Compare(dateFrom, dateTo);
-                    } while (dateCompareResult >= 0);
-                    
-                    
-                    reservations.Add(new Reservation(Guid.NewGuid(), mainUser, selectedVehicle, dateFrom, dateTo));
+                    reservations.Add(mainUser.createNewReservation(reservations, vehicles, todaysDate));
                     
                     Console.WriteLine("\nRezervace úspěšně přidána\n");
                     break;
@@ -841,7 +759,7 @@ namespace VozovyPark
         }
 
 
-        private static DateTime findNextAvailableDate(List<Reservation> lReservations)
+        public static DateTime findNextAvailableDate(List<Reservation> lReservations)
         {
             DateTime nextDate = lReservations[0].DateTo.AddDays(1.0);
             
