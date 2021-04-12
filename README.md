@@ -6,7 +6,6 @@ Omlouvám se, ale nestihl jsem dokončit projekt včas. Budu se snažit dodělat
 
 ## Chybějící funkce:
 ### Administrátor:
-- vložení rezervace jménem uživatele
 - vynucení změny hesla
 - zobrazení rezervací po kategoriích
 ### Uživatel
