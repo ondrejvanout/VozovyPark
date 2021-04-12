@@ -57,7 +57,7 @@ namespace VozovyPark
 
         public void print()
         {
-            Console.WriteLine($"Vozidlo: {Vehicle}\nod: {dateFrom.ToString("dd.MM.yyyy")}\ndo: {dateTo.ToString("dd.MM.yyyy")}");
+            Console.WriteLine($"Vozidlo: {Vehicle}\nod: {dateFrom.ToString("dd.MM.yyyy")}\ndo: {dateTo.ToString("dd.MM.yyyy")}\n");
         }
     }
 }
