@@ -335,8 +335,11 @@ namespace VozovyPark
                                 Console.WriteLine($"{BARRIER}\n{BARRIER}");
                                 Console.WriteLine("Příhlášen jako uživatel");
                                 Console.WriteLine($"Jméno: {mainUser.FirstName}\nPříjmení: {mainUser.LastName}\n" +
-                                                  $"Poslední přihlášení: {mainUser.LastLoginDate}\n");
+                                                  $"Poslední přihlášení: {mainUser.LastLoginDate.ToString("HH:mm dd.MM.yyyy")}\n");
 
+                                // Update last login date
+                                mainUser.LastLoginDate = DateTime.Now;
+                                
                                 int operationCode;
                                 do
                                 {
@@ -652,6 +655,10 @@ namespace VozovyPark
                         
                         Console.WriteLine("\nVozidlo úspěšně odstraněno\n");
                     }
+                    
+                    break;
+                case 6:
+                    // Add reservation as user
                     
                     break;
                 case 8:
