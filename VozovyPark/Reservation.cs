@@ -59,5 +59,10 @@ namespace VozovyPark
         {
             Console.WriteLine($"Vozidlo: {Vehicle}\nod: {dateFrom.ToString("dd.MM.yyyy")}\ndo: {dateTo.ToString("dd.MM.yyyy")}\n");
         }
+
+        public void printForAdmin()
+        {
+            Console.WriteLine($"Uživatel: {User.FirstName} {User.LastName}\nVozidlo: {Vehicle}\nod: {dateFrom.ToString("dd.MM.yyyy")}\ndo: {dateTo.ToString("dd.MM.yyyy")}\n");
+        }
     }
 }

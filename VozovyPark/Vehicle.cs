@@ -138,6 +138,18 @@ namespace VozovyPark
             }
         }
 
+        public int numberOfReservations(List<Reservation> reservations)
+        {
+            int count = 0;
+            foreach (Reservation x in reservations)
+            {
+                if (Id.Equals(x.Vehicle.Id))
+                    count++;
+            }
+
+            return count;
+        }
+
         public override string ToString()
         {
             return $"{Brand} {Model} ({Type})";
