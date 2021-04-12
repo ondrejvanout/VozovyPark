@@ -1,10 +1,11 @@
 <id>e4f2efb5-28c5-40e6-9cff-a7cc6fe63882<id><b>Mazda<b><m>2<m><t>hatchback<t><f>6.5<f><r>True<r><d>False<d>
 <id>d0402948-1c76-482c-85d5-6d3ae2adf984<id><b>Audi<b><m>A8<m><t>sedan<t><f>8.4<f><r>False<r><d>False<d>
-<id>f53d7931-e788-442f-a284-aca8aafe7a66<id><b>BMW<b><m>X5<m><t>SUV<t><f>10.3<f><r>False<r><d>False<d>
+<id>f53d7931-e788-442f-a284-aca8aafe7a66<id><b>BMW<b><m>X5<m><t>SUV<t><f>10.3<f><r>True<r><d>False<d>
 <id>3b2a2d67-1f5c-4fac-8ce6-cf1c9e701246<id><b>Jaguar<b><m>F-Type<m><t>coupe<t><f>8.7<f><r>False<r><d>False<d>
 <id>90d83a3f-113d-4d08-81af-f265bb8822aa<id><b>Honda<b><m>Civic<m><t>combi<t><f>6.8<f><r>True<r><d>False<d>
 <id>4086356c-f963-4240-a55f-9712158b93c3<id><b>Ford<b><m>Mondeo<m><t>sedan<t><f>7.4<f><r>True<r><d>False<d>
 <id>6a182877-7e9d-40ad-a93c-e55235f451c3<id><b>Ford<b><m>Mondeo<m><t>sedan<t><f>7.4<f><r>False<r><d>False<d>
+<id>cd29959d-9f52-4854-96a7-00399bf76cb4<id><b>Toyota<b><m>Yaris<m><t>hatchback<t><f>8<f><r>True<r><d>False<d>
 <id>3ee7883f-bef2-4920-b1a6-4f0b11753b87<id><b>Honda<b><m>Ridgeline<m><t>pick-up<t><f>10.2<f><r>False<r><d>True<d>
 <id>6e1651d3-9438-4461-9321-12d3be24e04a<id><b>Renault<b><m>Clio<m><t>hatchback<t><f>7<f><r>False<r><d>True<d>
 <id>f472d7cb-95ee-4eb5-9e5f-d86e62a1ca5e<id><b>Ford<b><m>Mustang<m><t>coupe<t><f>13.4<f><r>False<r><d>True<d>
