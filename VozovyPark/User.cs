@@ -41,6 +41,9 @@ namespace VozovyPark
             get => lastLoginDate;
             set => lastLoginDate = value;
         }
+        
+        // Set true if forced password change is required
+        public bool forcedPsswdChange;
 
         public User(Guid id, string fName, string lName, string psswd)
         {
@@ -48,9 +51,10 @@ namespace VozovyPark
             FirstName = fName;
             LastName = lName;
             Password = psswd;
+            forcedPsswdChange = false;
         }
         
-        // Use when ogin
+        // Use when login
         public User(string fName, string lName, string psswd)
         {
             FirstName = fName;
@@ -59,13 +63,14 @@ namespace VozovyPark
         }
 
         // Call to initialize if loading Users from file
-        public User(Guid id, string fName, string lName, string encodedPsswd, int shift, DateTime lastLogDate)
+        public User(Guid id, string fName, string lName, string encodedPsswd, int shift, DateTime lastLogDate, bool changePassword)
         {
             _id = id;
             FirstName = fName;
             LastName = lName;
             Password = DecodePassword(shift, encodedPsswd);
             LastLoginDate = lastLogDate;
+            forcedPsswdChange = changePassword;
         }
 
         /*
@@ -247,7 +252,7 @@ namespace VozovyPark
          */
         public string toFileFormat()
         {
-            return $"<id>{Id}<id><n>{FirstName}<n><l>{LastName}<l><p>{encodePassword()}<p><d>{LastLoginDate.ToString()}<d>";
+            return $"<id>{Id}<id><n>{FirstName}<n><l>{LastName}<l><p>{encodePassword()}<p><d>{LastLoginDate.ToString()}<d><pc>{forcedPsswdChange}<pc>";
         }
     }
 }

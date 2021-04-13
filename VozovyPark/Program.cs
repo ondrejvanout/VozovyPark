@@ -127,8 +127,14 @@ namespace VozovyPark
                 Match dateMatch = regex.Match(user);
                 groups = dateMatch.Groups;
                 DateTime lastLoginDate = DateTime.Parse(groups[1].ToString());
+                
+                // FORCED PASSWORD CHANGE
+                regex = new Regex("<pc>(.*)<pc>");
+                Match passwordChangeMatch = regex.Match(user);
+                groups = passwordChangeMatch.Groups;
+                bool requiredPasswordChange = Boolean.Parse(groups[1].ToString());
 
-                User currentUser = new User(id, name, lastName, encodedPassword[1], int.Parse(encodedPassword[0]), lastLoginDate);
+                User currentUser = new User(id, name, lastName, encodedPassword[1], int.Parse(encodedPassword[0]), lastLoginDate, requiredPasswordChange);
                 
                 if (name.Equals(string.Empty) && lastName.Equals(string.Empty) && encodedPassword[1].Equals(string.Empty))
                     deletedUsers.Add(currentUser);
@@ -329,6 +335,17 @@ namespace VozovyPark
                                     mainUser = loginUser();
                                 } while (mainUser == null);
                                 
+                                /*
+                                 * Required password change
+                                 */
+                                if (mainUser.forcedPsswdChange)
+                                {
+                                    Console.WriteLine("==Vyžádána změna hesla==");
+                                    Console.WriteLine("Nové heslo:");
+                                    mainUser.Password = Console.ReadLine();
+                                    mainUser.forcedPsswdChange = false;
+                                }
+
                                 /*
                                  * User´s operations 
                                  */
@@ -687,6 +704,13 @@ namespace VozovyPark
                     // Reservation
                     reservations.Add(selectedUser.createNewReservation(reservations, vehicles, todaysDate));
                     break;
+                case 7:
+                    // Forced password change
+                    int selectIndex = selectUser(users);
+                    users[selectIndex].forcedPsswdChange = true;
+                    
+                    Console.WriteLine("\nZměna hesla vynucena.\n");
+                    break;
                 case 8:
                     Console.WriteLine("==Uživatelé==:");
                     for (int i = 0; i < users.Count; i++) 
@@ -776,6 +800,35 @@ namespace VozovyPark
             }
 
             return nextDate;
+        }
+        
+        /*
+         * Select user from users list
+         */
+        public static int selectUser(List<User> userList)
+        {
+            // Select user
+            Console.WriteLine("==Uživatelé==:");
+            for (int i = 0; i < userList.Count; i++)
+            {
+                Console.Write($"[{i}] - ");
+                userList[i].print();
+            }
+                    
+            int userIndex;
+            int parseAttempt = 0;
+            bool successfulParse;
+            do
+            {
+                if (parseAttempt > 0)
+                    Console.WriteLine("Zadejte číslo přiřazené k vozu, které si přejete vybrat");
+                        
+                Console.Write("Uživatel: ");
+                parseAttempt++;
+                successfulParse = int.TryParse(Console.ReadLine(), out userIndex);
+            } while (!successfulParse || userIndex < 0 || userIndex >= userList.Count);
+
+            return userIndex;
         }
     }
 }
