@@ -764,7 +764,21 @@ namespace VozovyPark
                     break;
                 case 3:
                     // Delete reservation
-                
+                    int reservationIndex = selectUsersReservation(reservations, mainUser);
+
+                    Vehicle vehicle = reservations[reservationIndex].Vehicle;
+                    int numberOfReservations = 0;
+                    foreach (Reservation x in reservations)
+                    {
+                        if (vehicle.Id.Equals(x.Vehicle.Id))
+                            numberOfReservations++;
+                    }
+
+                    if (numberOfReservations == 1)
+                        vehicle.isReserved = false;
+                    
+                    reservations.RemoveAt(reservationIndex);
+                    Console.WriteLine("\nRezervace úpěšně odstraněna\n");
                     break;
                 case 4:
                     // Show all reservations
@@ -808,7 +822,7 @@ namespace VozovyPark
         public static int selectUser(List<User> userList)
         {
             // Select user
-            Console.WriteLine("==Uživatelé==:");
+            Console.WriteLine("\n==Uživatelé==:");
             for (int i = 0; i < userList.Count; i++)
             {
                 Console.Write($"[{i}] - ");
@@ -821,7 +835,7 @@ namespace VozovyPark
             do
             {
                 if (parseAttempt > 0)
-                    Console.WriteLine("Zadejte číslo přiřazené k vozu, které si přejete vybrat");
+                    Console.WriteLine("Zadejte číslo přiřazené k uživateli, kterého si přejete vybrat");
                         
                 Console.Write("Uživatel: ");
                 parseAttempt++;
@@ -829,6 +843,41 @@ namespace VozovyPark
             } while (!successfulParse || userIndex < 0 || userIndex >= userList.Count);
 
             return userIndex;
+        }
+        
+        /*
+         * Select reservation from reservations list
+         */
+        public static int selectUsersReservation(List<Reservation> resevationsList, User user)
+        {
+            Console.WriteLine("\n==Rezervace==:");
+
+            // Populate users reservation list
+            List<int> usersReservationIndexes = new List<int>();
+            for (int i = 0; i < resevationsList.Count; i++)
+            {
+                if (resevationsList[i].User.Id.Equals(user.Id))
+                {
+                    Console.Write($"[{i}] - ");
+                    resevationsList[i].print();
+                    usersReservationIndexes.Add(i);
+                }
+            }
+
+            int reservationIndex;
+            int parseAttempt = 0;
+            bool successfulParse;
+            do
+            {
+                if (parseAttempt > 0)
+                    Console.WriteLine("Zadejte číslo přiřazené k rezervaci, kterou si přejete vybrat");
+                        
+                Console.Write("Uživatel: ");
+                parseAttempt++;
+                successfulParse = int.TryParse(Console.ReadLine(), out reservationIndex);
+            } while (!successfulParse || !usersReservationIndexes.Contains(reservationIndex));
+
+            return reservationIndex;
         }
     }
 }
