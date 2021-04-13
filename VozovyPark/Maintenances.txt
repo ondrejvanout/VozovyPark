@@ -9,6 +9,9 @@
 <id>6d161cdd-ff24-4e2b-914a-02d90b0f6938<id><cid>4086356c-f963-4240-a55f-9712158b93c3<cid><s>Oprava elektroniky<s><t>6/25/2020 11:20:00 AM<t><c>7460<c><ic>0101112552<ic>
 <id>e8fe9f0a-3577-4d26-be32-4dcc6bd92152<id><cid>6a182877-7e9d-40ad-a93c-e55235f451c3<cid><s>Oprava elektroniky<s><t>6/20/2020 11:20:00 AM<t><c>7550<c><ic>520054<ic>
 <id>2ed72a43-3a0b-48da-879c-8e51ab73558c<id><cid>cd29959d-9f52-4854-96a7-00399bf76cb4<cid><s>Celkový servis + doplnění brzdové kapaliny<s><t>12/7/2020 11:00:00 AM<t><c>5000<c><ic>558200<ic>
+<id>4c3d190c-dfac-4677-8f0f-38c3aea439c2<id><cid>371225f9-57f3-4497-9279-2385f503f8e4<cid><s>Celkový servis<s><t>11/14/2019 11:00:00 AM<t><c>3000<c><ic>6574711<ic>
+<id>07f6060a-e5a1-4283-973a-3ad4b1f5f991<id><cid>371225f9-57f3-4497-9279-2385f503f8e4<cid><s>Řešení rychlého vybíjení baterie<s><t>11/20/2020 1:20:00 PM<t><c>4100<c><ic>1128738<ic>
+<id>7ae6d31d-8c73-454e-8614-043775a41f83<id><cid>78323b7d-0c34-441a-a78a-f6306f603934<cid><s>Oprava baterie<s><t>8/7/2020 4:00:00 PM<t><c>8900<c><ic>333681<ic>
 <id>558f4b0b-e75c-4431-9a06-69f05f9dc2b2<id><cid>f472d7cb-95ee-4eb5-9e5f-d86e62a1ca5e<cid><s>Výměna brzd<s><t>4/19/2021 11:00:00 AM<t><c>10000<c><ic>979611<ic>
 <id>7909b05c-add9-4ef9-b47d-af6507f3802c<id><cid>f472d7cb-95ee-4eb5-9e5f-d86e62a1ca5e<cid><s>Celkový servis<s><t>1/15/2020 1:15:00 PM<t><c>8650<c><ic>07586690<ic>
 <id>2f81f5df-c492-4711-9110-ad4fe2e97e21<id><cid>f472d7cb-95ee-4eb5-9e5f-d86e62a1ca5e<cid><s>Výměna parkovací kamery<s><t>5/7/2020 9:00:00 AM<t><c>14050<c><ic>775215<ic>
