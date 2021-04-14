@@ -30,6 +30,7 @@ namespace VozovyPark
 
         static Dictionary<int, string> userOperations;
         static Dictionary<int, string> adminOperations;
+        static Dictionary<int, string> reservationCategories;
 
         static List<User> users;
         static List<User> deletedUsers;
@@ -62,6 +63,13 @@ namespace VozovyPark
             adminOperations.Add(9, "Zobrazit všechna auta");
             adminOperations.Add(10, "Zobrazit rezervace");
             
+            // Reservation categories to select from when showing all reservations
+            reservationCategories = new Dictionary<int, string>();
+            reservationCategories.Add(0, "Po autech");
+            reservationCategories.Add(1, "Po osobách");
+            reservationCategories.Add(2, "Historické rezervace");
+            reservationCategories.Add(3, "Aktuální rezervace");
+            
             // User operations //
             userOperations = new Dictionary<int, string>();
             userOperations.Add(0, "Odhlásit");
@@ -83,6 +91,7 @@ namespace VozovyPark
             deletedVehicles = new List<Vehicle>();
             // List of all reservations
             reservations = new List<Reservation>();
+            
 
             string command = String.Empty;
             
@@ -730,9 +739,109 @@ namespace VozovyPark
                     break;
                 case 10:
                     // Show all reservations
-                    Console.WriteLine("==Rezervace==:");
-                    for (int i = 0; i < reservations.Count; i++)
-                        reservations[i].printForAdmin();
+                    Console.WriteLine("==Zobrazit rezervace==");
+                    foreach (KeyValuePair<int, string> category in reservationCategories)
+                    {
+                        Console.WriteLine($"[{category.Key}] - {category.Value}");
+                    }
+                    Console.WriteLine();
+                    
+                    int categoryIndex;
+                    int parseAtt = 0;
+                    bool success;
+                    do
+                    {
+                        if (parseAtt > 0)
+                            Console.WriteLine("Zadejte číslo přiřazené ke kategorii, podle které si přejete zobrazit rezervace");
+                        
+                        Console.Write("Kategorie: ");
+                        parseAtt++;
+                        success = int.TryParse(Console.ReadLine(), out categoryIndex);
+                    } while (!success || !reservationCategories.ContainsKey(categoryIndex));
+
+                    switch (categoryIndex)
+                    {
+                        case 0:
+                            // Reservations by vehicle
+                            int carIndex = selectVehicle(vehicles);
+
+                            Console.Write($"Rezervace vozidla {vehicles[carIndex]}\n");
+                            int vCount = 0;
+                            foreach (Reservation reservation in reservations)
+                            {
+                                if (reservation.Vehicle.Id.Equals(vehicles[carIndex].Id))
+                                {
+                                    reservation.User.print();
+                                    reservation.print();
+                                    vCount++;
+                                }
+                            }
+                            
+                            if (vCount == 0)
+                                Console.WriteLine("Vozidlo nemá žádné rezervace.\n");
+                            
+                            break;
+                        case 1:
+                            // Reservations by user
+                            int uIndex = selectUser(users);
+                            
+                            Console.Write($"Rezervace uživatele ");
+                            users[uIndex].print();
+
+                            int uCount = 0;
+                            foreach (Reservation reservation in reservations)
+                            {
+                                if (reservation.User.Id.Equals(users[uIndex].Id))
+                                {
+                                    reservation.print();
+                                    uCount++;
+                                }
+                            }
+                            
+                            if (uCount == 0)
+                                Console.WriteLine("Uživatel nemá žádné rezervace.\n");
+                            
+                            break;
+                        case 2:
+                            // Historic reservations
+                            Console.WriteLine("==Historické rezervace==:");
+                            int hCount = 0;
+                            foreach (Reservation reservation in reservations)
+                            {
+                                if (DateTime.Compare(reservation.DateTo, todaysDate) < 0)
+                                {
+                                    reservation.User.print();
+                                    reservation.print();
+                                    hCount++;
+                                }
+                            }
+                            
+                            if (hCount == 0)
+                                Console.WriteLine("Nejsou žádné historické rezervace.\n");
+                            
+                            break;
+                        case 3:
+                            // Actual reservations
+                            Console.WriteLine("==Aktuální rezervace==:");
+                            int aCount = 0;
+                            foreach (Reservation reservation in reservations)
+                            {
+                                if (DateTime.Compare(todaysDate, reservation.DateTo) < 0)
+                                {
+                                    reservation.User.print();
+                                    reservation.print();
+                                    aCount++;
+                                }
+                            }
+
+                            if (aCount == 0) 
+                                Console.WriteLine("Nejsou žádné aktuální rezervace.\n");
+                            
+                            break;
+                        default:
+                            Console.WriteLine("Nastala chyba.");
+                            break;
+                    }
                     
                     break;
                 default:
@@ -814,6 +923,35 @@ namespace VozovyPark
             }
 
             return nextDate;
+        }
+        
+        /*
+         * Select vehicle fro vehicles list
+         */
+        public static int selectVehicle(List<Vehicle> vehiclesList)
+        {
+            // Select vehicle
+            Console.WriteLine("\n==Vozidla==:");
+            for (int i = 0; i < vehiclesList.Count; i++)
+            {
+                Console.Write($"[{i}] - ");
+                Console.WriteLine(vehiclesList[i]);
+            }
+                    
+            int vehicleIndex;
+            int parseAttempt = 0;
+            bool successfulParse;
+            do
+            {
+                if (parseAttempt > 0)
+                    Console.WriteLine("Zadejte číslo přiřazené k vozidlu, které si přejete vybrat");
+                        
+                Console.Write("Vozidlo: ");
+                parseAttempt++;
+                successfulParse = int.TryParse(Console.ReadLine(), out vehicleIndex);
+            } while (!successfulParse || vehicleIndex < 0 || vehicleIndex >= vehiclesList.Count);
+
+            return vehicleIndex;
         }
         
         /*
