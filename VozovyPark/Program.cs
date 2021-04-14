@@ -655,6 +655,7 @@ namespace VozovyPark
 
                     break;
                 case 5:
+                    // Delete vehicle
                     Console.WriteLine("Dostupná vozidla:");
                     for (int i = 0; i < vehicles.Count; i++) 
                         Console.WriteLine($"[{i}] - {vehicles[i]}");
@@ -675,6 +676,14 @@ namespace VozovyPark
                     if (vehicles.ElementAt(index) != null)
                     {
                         Vehicle deletedVehicle = vehicles[index];
+                        
+                        // Delete reservations with this vehicle
+                        for (int i = 0; i < reservations.Count; i++)
+                        {
+                            if (reservations[i].Vehicle.Id.Equals(deletedVehicle.Id))
+                                reservations.RemoveAt(i);
+                        }
+                        
                         deletedVehicle.isDeleted = true;
                         deletedVehicles.Add(deletedVehicle);
                         vehicles.RemoveAt(index);
